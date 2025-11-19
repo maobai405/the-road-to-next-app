@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PlaceHolder } from "@/components/placeholder";
 import { Button } from "@/components/ui/button";
 import { initialTickets } from "@/data";
+import { TicketItem } from "@/features/ticket/components/ticketItem";
 import { ticketsPath } from "@/paths";
 
 type TicketPageProps = {
@@ -11,9 +12,9 @@ type TicketPageProps = {
 };
 export default async function TicketPage({ params }: TicketPageProps) {
   const { id } = await params;
-  const currentTicket = initialTickets.find((ticket) => ticket.id === id);
+  const ticket = initialTickets.find((item) => item.id === id);
 
-  if (!currentTicket) {
+  if (!ticket) {
     return (
       <PlaceHolder
         button={
@@ -26,5 +27,9 @@ export default async function TicketPage({ params }: TicketPageProps) {
     );
   }
 
-  return <h2>{currentTicket.title}</h2>;
+  return (
+    <div className="flex justify-center">
+      <TicketItem isDetail ticket={ticket} />
+    </div>
+  );
 }
