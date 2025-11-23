@@ -1,9 +1,9 @@
 import {
-  integer,
   pgEnum,
   pgTable,
   text,
   timestamp,
+  uuid,
   varchar,
 } from "drizzle-orm/pg-core";
 
@@ -15,15 +15,15 @@ export const ticketStatus = pgEnum("ticket_status", [
 ]);
 
 export const ticketsTable = pgTable("tickets", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  createdAt: timestamp({ mode: "date" }).notNull().defaultNow(),
-  updatedAt: timestamp({ mode: "date" })
+  id: uuid("id").defaultRandom().primaryKey(),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt", { mode: "date" })
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
-  title: text().notNull(),
-  content: varchar({ length: 1024 }).notNull(),
-  status: ticketStatus().notNull().default("OPEN"),
+  title: text("title").notNull(),
+  content: varchar("content", { length: 1024 }).notNull(),
+  status: ticketStatus("status").notNull().default("OPEN"),
 });
 
 export type Ticket = typeof ticketsTable.$inferSelect;

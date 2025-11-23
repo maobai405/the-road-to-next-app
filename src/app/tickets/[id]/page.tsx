@@ -4,7 +4,7 @@ import { getTicket } from "@/features/ticket/server";
 
 type TicketPageProps = {
   params: Promise<{
-    id: number;
+    id: string;
   }>;
 };
 export default async function TicketPage({ params }: TicketPageProps) {

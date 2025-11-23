@@ -1,5 +1,6 @@
-import * as motion from "motion/react-client";
+"use client";
 
+import * as motion from "motion/react-client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +8,7 @@ import type { Ticket } from "@/drizzle/schema";
 import { TICKET_ICONS } from "@/features/constants";
 import { cn } from "@/lib/utils";
 import { ticketPath } from "@/paths";
+import { deleteTicket } from "../server";
 
 type TicketItemProps = {
   ticket: Ticket;
@@ -25,6 +27,25 @@ export function TicketItem({
         <span className="icon-[lucide--info] size-4" />
       </Link>
     </Button>
+  );
+
+  const handleDeleteTicket = () => {
+    deleteTicket(ticket.id);
+  };
+
+  const deteleButton = (
+    <form action={deleteTicket.bind(null, ticket.id)}>
+      <Button
+        asChild
+        onClick={handleDeleteTicket}
+        size="icon"
+        variant="outline"
+      >
+        <Link href={ticketPath(ticket.id)}>
+          <span className="icon-[lucide--trash] size-4" />
+        </Link>
+      </Button>
+    </form>
   );
   return (
     <motion.div
@@ -55,7 +76,9 @@ export function TicketItem({
         </CardContent>
       </Card>
 
-      {!isDetail && <div className="flex flex-col gap-y-1">{detailButton}</div>}
+      <div className="flex flex-col gap-y-1">
+        {isDetail ? deteleButton : detailButton}
+      </div>
     </motion.div>
   );
 }
