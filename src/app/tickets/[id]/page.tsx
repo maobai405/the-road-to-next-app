@@ -1,30 +1,18 @@
-import Link from "next/link";
-import { PlaceHolder } from "@/components/placeholder";
-import { Button } from "@/components/ui/button";
-import { initialTickets } from "@/data";
+import { notFound } from "next/navigation";
 import { TicketItem } from "@/features/ticket/components/ticketItem";
-import { ticketsPath } from "@/paths";
+import { getTicket } from "@/features/ticket/server";
 
 type TicketPageProps = {
   params: Promise<{
-    id: string;
+    id: number;
   }>;
 };
 export default async function TicketPage({ params }: TicketPageProps) {
   const { id } = await params;
-  const ticket = initialTickets.find((item) => item.id === id);
+  const ticket = await getTicket(id);
 
   if (!ticket) {
-    return (
-      <PlaceHolder
-        button={
-          <Button asChild variant="outline">
-            <Link href={ticketsPath()}>Go to Tickets</Link>
-          </Button>
-        }
-        label="Ticket not found"
-      />
-    );
+    notFound();
   }
 
   return (
