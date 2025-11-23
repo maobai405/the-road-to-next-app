@@ -3,8 +3,8 @@ import * as motion from "motion/react-client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { Ticket } from "@/drizzle/schema";
 import { TICKET_ICONS } from "@/features/constants";
-import type { Ticket } from "@/features/types";
 import { cn } from "@/lib/utils";
 import { ticketPath } from "@/paths";
 

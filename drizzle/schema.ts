@@ -25,3 +25,5 @@ export const ticketsTable = pgTable("tickets", {
   content: varchar({ length: 1024 }).notNull(),
   status: ticketStatus().notNull().default("OPEN"),
 });
+
+export type Ticket = typeof ticketsTable.$inferSelect;
