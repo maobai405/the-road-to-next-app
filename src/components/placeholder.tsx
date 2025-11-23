@@ -7,7 +7,7 @@ type PlaceHolderProps = {
   button?: React.ReactElement<React.ComponentPropsWithoutRef<"button">>;
 };
 
-export function PlaceHolder({
+export function Placeholder({
   icon = "icon-[lucide--triangle-alert]",
   label,
   button = <div />,
