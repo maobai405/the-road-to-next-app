@@ -1,0 +1,118 @@
+{
+  "timestamp": "2025-11-25T09:56:41.000Z",
+  "project": "the-road-to-next-app",
+  "version": "0.1.0",
+  "scan": {
+    "strategy": "adaptive",
+    "phase": "B",
+    "coverage": {
+      "estimatedTotalFiles": 45,
+      "scannedFiles": 28,
+      "coveragePercentage": 62.2,
+      "truncated": false
+    },
+    "modules": [
+      {
+        "path": "src",
+        "type": "source",
+        "entryPoints": ["app/layout.tsx", "app/page.tsx"],
+        "apis": ["paths.ts"],
+        "dependencies": ["package.json", "tsconfig.json"],
+        "tests": false,
+        "coverage": "good"
+      },
+      {
+        "path": "src/app",
+        "type": "routing",
+        "entryPoints": ["layout.tsx", "page.tsx", "tickets/page.tsx"],
+        "apis": ["tickets/[id]/page.tsx"],
+        "dependencies": ["globals.css"],
+        "tests": false,
+        "coverage": "good"
+      },
+      {
+        "path": "src/components",
+        "type": "ui",
+        "entryPoints": ["ui/button.tsx", "theme/themeProvider.tsx"],
+        "apis": ["header.tsx", "heading.tsx"],
+        "dependencies": ["../lib/utils.ts"],
+        "tests": false,
+        "coverage": "good"
+      },
+      {
+        "path": "src/features/ticket",
+        "type": "feature",
+        "entryPoints": ["server/index.ts", "components/ticketList.tsx"],
+        "apis": ["components/ticketItem.tsx"],
+        "dependencies": ["../drizzle/schema.ts", "../lib/db.ts"],
+        "tests": false,
+        "coverage": "good"
+      },
+      {
+        "path": "src/lib",
+        "type": "utilities",
+        "entryPoints": ["db.ts", "utils.ts"],
+        "apis": [],
+        "dependencies": ["drizzle-orm", "postgres"],
+        "tests": false,
+        "coverage": "good"
+      },
+      {
+        "path": "drizzle",
+        "type": "database",
+        "entryPoints": ["schema.ts"],
+        "apis": ["seed/index.ts"],
+        "dependencies": ["drizzle-orm/pg-core"],
+        "tests": false,
+        "coverage": "good"
+      }
+    ],
+    "ignored": {
+      "patterns": [
+        "node_modules/**",
+        ".git/**",
+        ".next/**",
+        "*.lock",
+        "*.log",
+        ".env*"
+      ],
+      "topDirectories": ["node_modules", ".next", ".git"],
+      "reason": "standard gitignore patterns and build artifacts"
+    },
+    "gaps": [
+      {
+        "module": "src",
+        "gap": "测试配置缺失",
+        "priority": "medium",
+        "suggestedPaths": ["src/**/*.test.ts", "src/**/*.test.tsx"]
+      },
+      {
+        "module": "src/features/ticket",
+        "gap": "缺少票务创建和更新功能",
+        "priority": "high",
+        "suggestedPaths": [
+          "src/features/ticket/server/create.ts",
+          "src/features/ticket/server/update.ts"
+        ]
+      },
+      {
+        "module": "src/components",
+        "gap": "缺少表单组件",
+        "priority": "medium",
+        "suggestedPaths": [
+          "src/components/ui/input.tsx",
+          "src/components/ui/form.tsx"
+        ]
+      }
+    ]
+  },
+  "recommendations": {
+    "nextSteps": [
+      "优先补扫: src/features/ticket/server 目录，添加票务创建和更新功能",
+      "补充: src/components/ui 目录，添加输入框和表单组件",
+      "配置: 测试框架 (Jest + React Testing Library)",
+      "完善: 错误处理和边界情况测试"
+    ],
+    "priority": "medium"
+  }
+}
