@@ -1,6 +1,7 @@
 "use server";
 
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { type Ticket, ticketsTable } from "@/drizzle/schema";
 import { db } from "@/lib/db";
@@ -26,5 +27,6 @@ export const getTicket = async (id: string): Promise<Ticket | undefined> =>
 export const deleteTicket = async (id: string) => {
   await db.delete(ticketsTable).where(eq(ticketsTable.id, id));
 
+  revalidatePath(ticketsPath());
   redirect(ticketsPath());
 };
