@@ -23,7 +23,7 @@ export function TicketItem({
 }: TicketItemProps) {
   const detailButton = (
     <Button asChild size="icon" variant="outline">
-      <Link href={ticketPath(ticket.id)}>
+      <Link href={ticketPath(ticket.id)} prefetch>
         <span className="icon-[lucide--info] size-4" />
       </Link>
     </Button>
