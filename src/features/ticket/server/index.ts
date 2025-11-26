@@ -22,6 +22,23 @@ export const getTicket = async (id: string): Promise<Ticket | undefined> =>
   });
 
 /**
+ * 创建票务(单个)
+ */
+export const createTicket = async (formData: FormData) => {
+  const title = formData.get("title") as string;
+  const content = formData.get("content") as string;
+
+  // 实际插入数据库
+  await db.insert(ticketsTable).values({
+    title,
+    content,
+  });
+
+  // 重新验证页面以显示最新数据
+  revalidatePath(ticketsPath());
+};
+
+/**
  * 删除票务(单个)
  */
 export const deleteTicket = async (id: string) => {
