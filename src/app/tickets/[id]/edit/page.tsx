@@ -18,7 +18,7 @@ export default async function TicketEditPage({ params }: TicketEditPageProps) {
   return (
     <div className="flex flex-1 items-center justify-center">
       <CardCompact
-        content={<TicketUpsertForm ticket={ticket} type="update" />}
+        content={<TicketUpsertForm ticket={ticket} />}
         description="编辑现有票务"
         title="编辑票务"
       />

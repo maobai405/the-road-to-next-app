@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { type Ticket, ticketsTable } from "@/drizzle/schema";
 import { db } from "@/lib/db";
-import { ticketsPath } from "@/paths";
+import { ticketPath, ticketsPath } from "@/paths";
 
 /**
  * 获取票务列表
@@ -24,35 +24,31 @@ export const getTicket = async (id: string): Promise<Ticket | undefined> =>
   });
 
 /**
- * 创建票务(单个)
+ * 插入或更新票务(单个)
  */
-export const inertTicket = async (formData: FormData) => {
+export const upsertTicket = async (
+  id: string | undefined,
+  formData: FormData
+) => {
   const title = formData.get("title") as string;
   const content = formData.get("content") as string;
 
-  // 实际插入数据库
-  await db.insert(ticketsTable).values({ title, content });
-
-  // 重新验证页面以显示最新数据
-  revalidatePath(ticketsPath());
-};
-
-/**
- * 更新票务(单个)
- */
-export const updateTicket = async (id: string, formData: FormData) => {
-  const title = formData.get("title") as string;
-  const content = formData.get("content") as string;
-
-  // 更新票务
+  // 插入或更新票务
+  // 如果提供了 id，则尝试插入该 id 的记录；如果 id 已存在则更新
+  // 如果未提供 id，则生成新的 UUID 并插入
   await db
-    .update(ticketsTable)
-    .set({ title, content })
-    .where(eq(ticketsTable.id, id));
+    .insert(ticketsTable)
+    .values({ id, title, content })
+    .onConflictDoUpdate({
+      target: ticketsTable.id,
+      set: { title, content },
+    });
 
   // 重新验证页面以显示最新数据
   revalidatePath(ticketsPath());
-  redirect(ticketsPath());
+  if (id) {
+    redirect(ticketPath(id));
+  }
 };
 
 /**

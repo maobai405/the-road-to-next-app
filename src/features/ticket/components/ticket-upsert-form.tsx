@@ -3,24 +3,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import type { Ticket } from "@/drizzle/schema";
-import { inertTicket, updateTicket } from "../server";
+import { upsertTicket } from "../server";
 
 type TicketUpsertFormProps = {
-  type: "create" | "update";
   ticket?: Ticket;
 };
 
 /**
  * 创建/更新票务表单
  */
-export function TicketUpsertForm({ type, ticket }: TicketUpsertFormProps) {
+export function TicketUpsertForm({ ticket }: TicketUpsertFormProps) {
   return (
     <form
-      action={
-        type === "create"
-          ? inertTicket
-          : updateTicket.bind(null, ticket?.id ?? "")
-      }
+      action={upsertTicket.bind(null, ticket?.id)}
       className="flex flex-col gap-y-4"
     >
       <div>

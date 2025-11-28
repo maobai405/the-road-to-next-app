@@ -11,7 +11,7 @@ export default function TicketsPage() {
       <Heading description="所有票务,一站管理" title="TicketsPage" />
 
       <CardCompact
-        content={<TicketUpsertForm type="create" />}
+        content={<TicketUpsertForm />}
         description="创建一个新的票务"
         title="创建票务"
       />
