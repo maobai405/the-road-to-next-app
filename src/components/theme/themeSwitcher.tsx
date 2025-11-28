@@ -15,13 +15,13 @@ export function ThemeSwitcher() {
     >
       <span
         className={cn(
-          "icon-[lucide--sun] size-4 rotate-0 scale-100 transition-all",
+          "icon-[line-md--sun-rising-loop] size-4 rotate-0 scale-100 transition-all",
           "dark:-rotate-90 dark:scale-0"
         )}
       />
       <span
         className={cn(
-          "icon-[lucide--moon] absolute size-4 rotate-90 scale-0 transition-transform",
+          "icon-[line-md--sunny-outline-to-moon-loop-transition] absolute size-4 rotate-90 scale-0 transition-transform",
           "dark:rotate-0 dark:scale-100"
         )}
       />

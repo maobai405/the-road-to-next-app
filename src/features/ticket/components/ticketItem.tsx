@@ -24,7 +24,7 @@ export function TicketItem({
   const detailButton = (
     <Button asChild size="icon" variant="outline">
       <Link href={ticketPath(ticket.id)} prefetch>
-        <span className="icon-[lucide--info] size-4" />
+        <span className="icon-[line-md--alert-circle] size-4" />
       </Link>
     </Button>
   );
@@ -32,7 +32,7 @@ export function TicketItem({
   const editButton = (
     <Button asChild size="icon" variant="outline">
       <Link href={ticketEditPath(ticket.id)} prefetch>
-        <span className="icon-[lucide--pencil] size-4" />
+        <span className="icon-[line-md--pencil] size-4" />
       </Link>
     </Button>
   );
@@ -50,7 +50,7 @@ export function TicketItem({
         variant="outline"
       >
         <Link href={ticketPath(ticket.id)}>
-          <span className="icon-[lucide--trash] size-4" />
+          <span className="icon-[line-md--trash] size-4" />
         </Link>
       </Button>
     </form>
