@@ -7,6 +7,7 @@ type TicketPageProps = {
     id: string;
   }>;
 };
+
 export default async function TicketPage({ params }: TicketPageProps) {
   const { id } = await params;
   const ticket = await getTicket(id);

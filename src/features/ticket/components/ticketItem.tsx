@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Ticket } from "@/drizzle/schema";
 import { TICKET_ICONS } from "@/features/constants";
 import { cn } from "@/lib/utils";
-import { ticketPath } from "@/paths";
+import { ticketEditPath, ticketPath } from "@/paths";
 import { deleteTicket } from "../server";
 
 type TicketItemProps = {
@@ -25,6 +25,14 @@ export function TicketItem({
     <Button asChild size="icon" variant="outline">
       <Link href={ticketPath(ticket.id)} prefetch>
         <span className="icon-[lucide--info] size-4" />
+      </Link>
+    </Button>
+  );
+
+  const editButton = (
+    <Button asChild size="icon" variant="outline">
+      <Link href={ticketEditPath(ticket.id)} prefetch>
+        <span className="icon-[lucide--pencil] size-4" />
       </Link>
     </Button>
   );
@@ -47,6 +55,7 @@ export function TicketItem({
       </Button>
     </form>
   );
+
   return (
     <motion.div
       animate={{ y: 0, opacity: 1 }}
@@ -77,7 +86,17 @@ export function TicketItem({
       </Card>
 
       <div className="flex flex-col gap-y-1">
-        {isDetail ? deteleButton : detailButton}
+        {isDetail ? (
+          <>
+            {deteleButton}
+            {editButton}
+          </>
+        ) : (
+          <>
+            {detailButton}
+            {editButton}
+          </>
+        )}
       </div>
     </motion.div>
   );
