@@ -1,6 +1,6 @@
 import { Placeholder } from "@/components/placeholder";
 import { getTickets } from "../server";
-import { TicketItem } from "./ticketItem";
+import { TicketItem } from "./ticket-item";
 
 export async function TicketList() {
   const tickets = await getTickets();

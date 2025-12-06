@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { TicketItem } from "@/features/ticket/components/ticketItem";
+import { TicketItem } from "@/features/ticket/components/ticket-item";
 import { getTicket } from "@/features/ticket/server";
 
 type TicketPageProps = {

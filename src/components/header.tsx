@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { homePath, ticketsPath } from "@/paths";
-import { ThemeSwitcher } from "./theme/themeSwitcher";
+import { ThemeSwitcher } from "./theme/theme-switcher";
 import { buttonVariants } from "./ui/button";
 
 export function Header() {
