@@ -1,5 +1,4 @@
-import { CardCompact } from "@/components/card-compact";
-import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
+import { TicketUpsertCard } from "@/features/ticket/components/ticket-upsert-card";
 import { getTicket } from "@/features/ticket/server";
 
 type TicketEditPageProps = {
@@ -17,11 +16,7 @@ export default async function TicketEditPage({ params }: TicketEditPageProps) {
 
   return (
     <div className="flex flex-1 items-center justify-center">
-      <CardCompact
-        content={<TicketUpsertForm ticket={ticket} />}
-        description="编辑现有票务"
-        title="编辑票务"
-      />
+      <TicketUpsertCard ticket={ticket} />
     </div>
   );
 }

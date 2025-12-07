@@ -3,8 +3,9 @@
 import { asc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { z } from "zod";
+import type { z } from "zod";
 import { type Ticket, ticketsTable } from "@/drizzle/schema";
+import { upsertTicketSchema } from "@/features/constants";
 import { db } from "@/lib/db";
 import { ticketPath, ticketsPath } from "@/paths";
 
@@ -24,24 +25,15 @@ export const getTicket = async (id: string): Promise<Ticket | undefined> =>
     where: eq(ticketsTable.id, id),
   });
 
-const upsertTicketSchema = z.object({
-  title: z.string().min(1).max(191),
-  content: z.string().min(1).max(1024),
-});
-
 /**
  * 插入或更新票务(单个)
  */
 export const upsertTicket = async (
   id: string | undefined,
-  _actionState: { message: string },
-  formData: FormData
+  data: z.infer<typeof upsertTicketSchema>
 ) => {
   try {
-    const params = upsertTicketSchema.parse({
-      title: formData.get("title"),
-      content: formData.get("content"),
-    });
+    const params = upsertTicketSchema.parse(data);
 
     // 插入或更新票务
     // 如果提供了 id，则尝试插入该 id 的记录；如果 id 已存在则更新
@@ -54,7 +46,7 @@ export const upsertTicket = async (
         set: params,
       });
   } catch (_error) {
-    return { message: "程序出现问题", payload: formData };
+    return { message: "程序出现问题", payload: data };
   }
 
   // 重新验证页面以显示最新数据
