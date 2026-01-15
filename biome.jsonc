@@ -5,6 +5,14 @@
     "rules": {
       "performance": {
         "noNamespaceImport": "off"
+      },
+      "style": {
+        "useConsistentTypeDefinitions": {
+          "level": "warn",
+          "options": {
+            "style": "type"
+          }
+        }
       }
     }
   }
