@@ -1,6 +1,8 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { CardCompact } from "@/components/card-compact";
 import { SubmitButton } from "@/components/form/submit-button";
 import {
@@ -13,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import type { Ticket } from "@/drizzle/schema";
 import { upsertTicketSchema } from "@/features/constants";
+import { ticketPath } from "@/paths";
 import { upsertTicket } from "../server";
 
 type TicketUpsertFormProps = {
@@ -25,6 +28,8 @@ const FORM_ID = "ticket-upsert-form";
  * 创建/更新票务表单卡片
  */
 export function TicketUpsertCard({ ticket }: TicketUpsertFormProps) {
+  const router = useRouter();
+
   const form = useForm({
     defaultValues: {
       title: ticket?.title ?? "",
@@ -34,11 +39,15 @@ export function TicketUpsertCard({ ticket }: TicketUpsertFormProps) {
       onChange: upsertTicketSchema,
     },
     onSubmit: async ({ value }) => {
-      try {
-        await upsertTicket(ticket?.id, value);
-      } catch (error) {
-        console.error("表单提交失败:", error);
+      const result = await upsertTicket(ticket?.id, value);
+
+      if (!result.ok) {
+        toast.error(result.message);
+        return;
       }
+
+      toast.success("操作成功");
+      router.push(ticketPath(result.id));
     },
   });
 

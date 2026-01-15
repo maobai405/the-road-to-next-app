@@ -7,7 +7,7 @@ import type { z } from "zod";
 import { type Ticket, ticketsTable } from "@/drizzle/schema";
 import { upsertTicketSchema } from "@/features/constants";
 import { db } from "@/lib/db";
-import { ticketPath, ticketsPath } from "@/paths";
+import { ticketsPath } from "@/paths";
 
 /**
  * 获取票务列表
@@ -28,34 +28,36 @@ export const getTicket = async (id: string): Promise<Ticket | undefined> =>
 /**
  * 插入或更新票务(单个)
  */
+export type UpsertTicketResult =
+  | { ok: true; id: string }
+  | { ok: false; message: string };
+
 export const upsertTicket = async (
   id: string | undefined,
   data: z.infer<typeof upsertTicketSchema>
-) => {
-  try {
-    const params = upsertTicketSchema.parse(data);
+): Promise<UpsertTicketResult> => {
+  const params = upsertTicketSchema.parse(data);
 
-    // 插入或更新票务
-    // 如果提供了 id，则尝试插入该 id 的记录；如果 id 已存在则更新
-    // 如果未提供 id，则生成新的 UUID 并插入
-    await db
+  try {
+    const inserted = await db
       .insert(ticketsTable)
-      .values({ id, ...params })
+      .values({ ...(id ? { id } : {}), ...params })
       .onConflictDoUpdate({
         target: ticketsTable.id,
         set: params,
-      });
-  } catch (_error) {
-    return { message: "程序出现问题", payload: data };
-  }
+      })
+      .returning({ id: ticketsTable.id });
 
-  // 重新验证页面以显示最新数据
-  revalidatePath(ticketsPath());
-  if (id) {
-    redirect(ticketPath(id));
-  }
+    const upsertedId = inserted.at(0)?.id;
+    if (!upsertedId) {
+      return { ok: false, message: "操作失败" };
+    }
 
-  return { message: "提交成功" };
+    revalidatePath(ticketsPath());
+    return { ok: true, id: upsertedId };
+  } catch {
+    return { ok: false, message: "操作失败" };
+  }
 };
 
 /**

@@ -1,9 +1,9 @@
 import { Separator } from "./ui/separator";
 
-type HeadingProps = {
+interface HeadingProps {
   title: string;
   description?: string;
-};
+}
 
 export function Heading({ title, description }: HeadingProps) {
   return (

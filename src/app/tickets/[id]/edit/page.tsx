@@ -1,11 +1,11 @@
 import { TicketUpsertCard } from "@/features/ticket/components/ticket-upsert-card";
 import { getTicket } from "@/features/ticket/server";
 
-type TicketEditPageProps = {
+interface TicketEditPageProps {
   params: Promise<{
     id: string;
   }>;
-};
+}
 
 /**
  * 票务编辑

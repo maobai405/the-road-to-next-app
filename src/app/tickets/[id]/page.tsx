@@ -2,11 +2,11 @@ import { notFound } from "next/navigation";
 import { TicketItem } from "@/features/ticket/components/ticket-item";
 import { getTicket } from "@/features/ticket/server";
 
-type TicketPageProps = {
+interface TicketPageProps {
   params: Promise<{
     id: string;
   }>;
-};
+}
 
 export default async function TicketPage({ params }: TicketPageProps) {
   const { id } = await params;
