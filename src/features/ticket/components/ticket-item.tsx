@@ -10,11 +10,11 @@ import { cn } from "@/lib/utils";
 import { ticketEditPath, ticketPath } from "@/paths";
 import { deleteTicket } from "../server";
 
-interface TicketItemProps {
+type TicketItemProps = {
   ticket: Ticket;
   index?: number;
   isDetail?: boolean;
-}
+};
 
 export function TicketItem({
   ticket,

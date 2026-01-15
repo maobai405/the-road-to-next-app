@@ -8,13 +8,13 @@ import {
   CardTitle,
 } from "./ui/card";
 
-interface CardCompactProps {
+type CardCompactProps = {
   className?: string;
   title: string;
   description: string;
   content: React.ReactNode;
   footer?: React.ReactNode;
-}
+};
 export function CardCompact({
   className,
   title,
@@ -23,7 +23,7 @@ export function CardCompact({
   footer,
 }: CardCompactProps) {
   return (
-    <Card className={cn("w-full max-w-[420px] self-center", className)}>
+    <Card className={cn("w-full max-w-105 self-center", className)}>
       <CardHeader>
         <CardTitle className="text-2xl">{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

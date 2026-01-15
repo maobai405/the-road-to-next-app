@@ -1,11 +1,11 @@
 import { cloneElement } from "react";
 import { cn } from "@/lib/utils";
 
-interface PlaceHolderProps {
+type PlaceHolderProps = {
   icon?: string;
   label: string;
   button?: React.ReactElement<React.ComponentPropsWithoutRef<"button">>;
-}
+};
 
 export function Placeholder({
   icon = "icon-[lucide--triangle-alert]",
