@@ -41,7 +41,7 @@ echo "🔧 运行代码检查和修复..."
 # 捕获 stdout 和 stderr 并保留退出码
 set +e
 # 只对暂存文件进行 lint 和格式化修复
-CHECK_OUTPUT=$(echo "$STAGED_FILES" | xargs pnpm check-fix 2>&1)
+CHECK_OUTPUT=$(echo "$STAGED_FILES" | xargs bu check-fix 2>&1)
 CHECK_EXIT_CODE=$?
 set -e
 
@@ -97,8 +97,9 @@ else
 
   echo "🔧 修复建议:"
   echo "   1. 修复 TypeScript 类型错误（需要手动修复）"
-  echo "   2. 运行 'pnpm check' 查看完整的类型错误信息"
-  echo "   3. 运行 'pnpm run check-fix' 检查所有问题"
+  echo "   2. 运行 'bun run check' 查看完整的类型错误信息"
+  echo "   3. 运行 'bun run check-fix' 检查所有问题"
+
   echo "   4. 修复后重新添加文件: git add <文件名>"
   echo "   5. 重新提交: git commit"
   echo ""
