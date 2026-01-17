@@ -41,7 +41,7 @@ echo "🔧 运行代码检查和修复..."
 # 捕获 stdout 和 stderr 并保留退出码
 set +e
 # 只对暂存文件进行 lint 和格式化修复
-CHECK_OUTPUT=$(echo "$STAGED_FILES" | xargs bu check-fix 2>&1)
+CHECK_OUTPUT=$(echo "$STAGED_FILES" | xargs bun check-fix 2>&1)
 CHECK_EXIT_CODE=$?
 set -e
 
