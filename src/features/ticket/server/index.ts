@@ -3,10 +3,11 @@
 import { asc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import type { z } from "zod";
+import { z } from "zod";
 import { type Ticket, ticketsTable } from "@/drizzle/schema";
 import { upsertTicketSchema } from "@/features/constants";
 import { db } from "@/lib/db";
+import { actionClient } from "@/lib/safe-action";
 import { ticketsPath } from "@/paths";
 
 /**
@@ -28,37 +29,32 @@ export const getTicket = async (id: string): Promise<Ticket | undefined> =>
 /**
  * 插入或更新票务(单个)
  */
-export type UpsertTicketResult =
-  | { ok: true; id: string }
-  | { ok: false; message: string };
+const upsertTicketInputSchema = z.object({
+  id: z.string().optional(),
+  data: upsertTicketSchema,
+});
 
-export const upsertTicket = async (
-  id: string | undefined,
-  data: z.infer<typeof upsertTicketSchema>
-): Promise<UpsertTicketResult> => {
-  const params = upsertTicketSchema.parse(data);
-
-  try {
+export const upsertTicket = actionClient
+  .inputSchema(upsertTicketInputSchema)
+  .action(async ({ parsedInput: { id, data } }) => {
     const inserted = await db
       .insert(ticketsTable)
-      .values({ ...(id ? { id } : {}), ...params })
+      .values({ ...(id ? { id } : {}), ...data })
       .onConflictDoUpdate({
         target: ticketsTable.id,
-        set: params,
+        set: data,
       })
       .returning({ id: ticketsTable.id });
 
     const upsertedId = inserted.at(0)?.id;
     if (!upsertedId) {
-      return { ok: false, message: "操作失败" };
+      throw new Error("操作失败");
     }
 
     revalidatePath(ticketsPath());
-    return { ok: true, id: upsertedId };
-  } catch {
-    return { ok: false, message: "操作失败" };
-  }
-};
+
+    return { id: upsertedId };
+  });
 
 /**
  * 删除票务(单个)

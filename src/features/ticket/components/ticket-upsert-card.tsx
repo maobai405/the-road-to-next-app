@@ -2,6 +2,7 @@
 
 import { useForm } from "@tanstack/react-form";
 import { useRouter } from "next/navigation";
+import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 import { CardCompact } from "@/components/card-compact";
 import { SubmitButton } from "@/components/form/submit-button";
@@ -30,6 +31,16 @@ const FORM_ID = "ticket-upsert-form";
 export function TicketUpsertCard({ ticket }: TicketUpsertFormProps) {
   const router = useRouter();
 
+  const { execute, isPending } = useAction(upsertTicket, {
+    onSuccess: ({ data }) => {
+      toast.success("操作成功");
+      router.push(ticketPath(data.id));
+    },
+    onError: ({ error }) => {
+      toast.error(error.serverError ?? "操作失败");
+    },
+  });
+
   const form = useForm({
     defaultValues: {
       title: ticket?.title ?? "",
@@ -38,16 +49,8 @@ export function TicketUpsertCard({ ticket }: TicketUpsertFormProps) {
     validators: {
       onChange: upsertTicketSchema,
     },
-    onSubmit: async ({ value }) => {
-      const result = await upsertTicket(ticket?.id, value);
-
-      if (!result.ok) {
-        toast.error(result.message);
-        return;
-      }
-
-      toast.success("操作成功");
-      router.push(ticketPath(result.id));
+    onSubmit: ({ value }) => {
+      execute({ id: ticket?.id, data: value });
     },
   });
 
@@ -111,20 +114,12 @@ export function TicketUpsertCard({ ticket }: TicketUpsertFormProps) {
       }
       description={ticket ? "编辑现有票务" : "创建一个新的票务"}
       footer={
-        <form.Subscribe
-          selector={(state) => ({
-            isSubmitting: state.isSubmitting,
-          })}
-        >
-          {({ isSubmitting }) => (
-            <SubmitButton
-              disabled={isSubmitting}
-              form={FORM_ID}
-              label={ticket ? "编辑" : "创建"}
-              pending={isSubmitting}
-            />
-          )}
-        </form.Subscribe>
+        <SubmitButton
+          disabled={isPending}
+          form={FORM_ID}
+          label={ticket ? "编辑" : "创建"}
+          pending={isPending}
+        />
       }
       title={ticket ? "编辑票务" : "创建票务"}
     />
