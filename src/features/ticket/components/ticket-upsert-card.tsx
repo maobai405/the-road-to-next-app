@@ -34,7 +34,11 @@ export function TicketUpsertCard({ ticket }: TicketUpsertFormProps) {
   const { execute, isPending } = useAction(upsertTicket, {
     onSuccess: ({ data }) => {
       toast.success("操作成功");
-      router.push(ticketPath(data.id));
+      // 重置表单
+      form.reset();
+      if (ticket) {
+        router.push(ticketPath(data.id));
+      }
     },
     onError: ({ error }) => {
       toast.error(error.serverError ?? "操作失败");
