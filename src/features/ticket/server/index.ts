@@ -1,14 +1,11 @@
 "use server";
 
 import { asc, eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { z } from "zod";
 import { type Ticket, ticketsTable } from "@/drizzle/schema";
 import { upsertTicketSchema } from "@/features/constants";
 import { db } from "@/lib/db";
 import { actionClient } from "@/lib/safe-action";
-import { ticketsPath } from "@/paths";
 
 /**
  * 获取票务列表
@@ -51,17 +48,18 @@ export const upsertTicket = actionClient
       throw new Error("操作失败");
     }
 
-    revalidatePath(ticketsPath());
-
     return { id: upsertedId };
   });
 
 /**
  * 删除票务(单个)
  */
-export const deleteTicket = async (id: string) => {
-  await db.delete(ticketsTable).where(eq(ticketsTable.id, id));
+const deleteTicketInputSchema = z.object({
+  id: z.string(),
+});
 
-  revalidatePath(ticketsPath());
-  redirect(ticketsPath());
-};
+export const deleteTicket = actionClient
+  .inputSchema(deleteTicketInputSchema)
+  .action(async ({ parsedInput: { id } }) => {
+    await db.delete(ticketsTable).where(eq(ticketsTable.id, id));
+  });
